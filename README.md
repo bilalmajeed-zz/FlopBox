@@ -1,4 +1,4 @@
-Flap-Those-Wings
+Flap Those Wings
 ================
 
 A flappy bird clone
