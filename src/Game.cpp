@@ -13,9 +13,16 @@ void Game::start()
 	mainWindow.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Flap Those Wings", sf::Style::Titlebar | sf::Style::Close);
 	mainWindow.setPosition(sf::Vector2i(400, 10));
 
+	background.load("res/graphics.png", sf::IntRect(0, 0, 287, 510)); //load bg
+	flappy.load("res/graphics.png", sf::IntRect(0, 0, 1024, 1024)); //load the bird
+	
+	birdAnimation.setSpriteSheet(flappy.getTexture());
+	birdAnimation.addFrame(sf::IntRect (174, 982, 34, 24));
+	birdAnimation.addFrame(sf::IntRect(230, 658, 34, 24));
+	birdAnimation.addFrame(sf::IntRect(230, 710, 34, 24));
+
 	gameState = Playing;
 
-	//while the game is still running go the game loop
 	while (!isExiting())
 		gameLoop();
 
@@ -35,33 +42,33 @@ void Game::gameLoop()
 	{
 		case Playing:
 		{
-			sf::Time elaspedTime = clock.restart();
+			AnimatedSprite animatedBirdSprite(sf::seconds(0.2f), false, true);
+			animatedBirdSprite.setPosition(sf::Vector2f(0, 0));
 
 			sf::Event currentEvent;
 			while (true)
 			{
+				sf::Time frameTime = frameClock.restart();
+				animatedBirdSprite.setFrameTime(sf::seconds(0.2f));
+					
 				if (mainWindow.pollEvent(currentEvent))
 				{
-					mainWindow.setMouseCursorVisible(false);
 					mainWindow.clear(sf::Color::Black);
 
-					//if the exit button is clicked
 					if (currentEvent.type == sf::Event::Closed)
 					{
 						gameState = Exiting;
 						break;
 					}
 
-					//if a keyboard button is pressed
 					if (currentEvent.type == sf::Event::KeyPressed)
 					{
-						//pressed SPACEBAR
 						if (currentEvent.key.code == sf::Keyboard::Space)
 						{
-							//move the bird up
+							flappy.update();
+							animatedBirdSprite.setFrameTime(sf::seconds(0.05f));
 						}
 
-						//pressed P
 						if (currentEvent.key.code == sf::Keyboard::P)
 						{
 							gameState = Paused;
@@ -70,8 +77,14 @@ void Game::gameLoop()
 					}
 				}
 
-				//UPDATE AND DRAW
-				flappy.draw(mainWindow);
+				animatedBirdSprite.play(birdAnimation);				
+
+				//UPDATE
+				animatedBirdSprite.update(frameTime);
+
+				//DRAW
+				background.draw(mainWindow);
+				mainWindow.draw(animatedBirdSprite);
 				mainWindow.display();
 			}
 			break;

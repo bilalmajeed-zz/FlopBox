@@ -5,6 +5,5 @@
 class Bird : public GameObjects
 {
 public:
-	Bird();
 	virtual void update();
 };

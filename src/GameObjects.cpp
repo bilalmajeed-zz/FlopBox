@@ -4,11 +4,10 @@ GameObjects::GameObjects():
 	isLoaded(false)
 {}
 
-void GameObjects::load(string imagePath)
+void GameObjects::load(string imagePath, sf::IntRect toShow)
 {
-	if (!texture.loadFromFile(imagePath))
-		//assert statement
-		cout << "ERROR" << endl;
+	if (!texture.loadFromFile(imagePath, toShow))
+		assert(loaded());
 	else
 	{
 		filename = imagePath;
@@ -44,6 +43,11 @@ sf::Vector2f GameObjects::getPosition() const
 sf::Sprite & GameObjects::getSprite()
 {
 	return sprite;
+}
+
+sf::Texture & GameObjects::getTexture()
+{
+	return texture;
 }
 
 bool GameObjects::loaded() const

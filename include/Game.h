@@ -4,6 +4,8 @@
 #include "SFML\Graphics.hpp"
 #include "SFML\Audio.hpp"
 
+#include "AnimatedSprite.h"
+#include "Animation.h"
 #include "Bird.h"
 
 class Game
@@ -13,8 +15,8 @@ public:
 	void start();
 
 private:
-	const int SCREEN_WIDTH = 400;
-	const int SCREEN_HEIGHT = 600;
+	static const int SCREEN_WIDTH = 287;
+	static const int SCREEN_HEIGHT = 510;
 
 	bool isExiting(); //checks if the game is over or not
 	void gameLoop(); //the main loop of the game
@@ -27,10 +29,15 @@ private:
 		Paused,
 		Exiting
 	};
-	sf::Clock clock;
+
+	//from the sfml libraries
+	sf::Clock frameClock;
 	GameState gameState;
 	sf::RenderWindow mainWindow;
-	
-	Bird flappy;
 
+	//from animation library by LaurentGomila
+	Animation birdAnimation;
+
+	Bird flappy;
+	GameObjects background;
 };
