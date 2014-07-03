@@ -22,10 +22,6 @@ void GameObjects::draw(sf::RenderWindow & window)
 		window.draw(sprite);
 }
 
-//to be overloaded
-void GameObjects::update()
-{}
-
 void GameObjects::setPosition(float x, float y)
 {
 	if (isLoaded)

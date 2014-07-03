@@ -10,23 +10,16 @@ void Game::start()
 	if (gameState != Uninit)
 		return;
 
+	srand(time(NULL));
 	mainWindow.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Flap Those Wings", sf::Style::Titlebar | sf::Style::Close);
 	mainWindow.setPosition(sf::Vector2i(400, 10));
 
-	background.load("res/graphics.png", sf::IntRect(0, 0, 287, 510)); //load bg
-	
-	ground[0].load("res/graphics.png", sf::IntRect(584, 0, 335, 111)); //load the ground
-	ground[1].load("res/graphics.png", sf::IntRect(584, 0, 335, 111)); //load the ground
-	
 	bird.load("res/graphics.png", sf::IntRect(0, 0, 1024, 1024)); //load the bird
 	
 	birdAnimation.setSpriteSheet(bird.getTexture());
 	birdAnimation.addFrame(sf::IntRect (174, 982, 34, 24));
 	birdAnimation.addFrame(sf::IntRect(230, 658, 34, 24));
 	birdAnimation.addFrame(sf::IntRect(230, 710, 34, 24));
-
-	ground[0].setPosition(0.f, 399.f);
-	ground[1].setPosition(287.f, 399.f);
 
 	gameState = Playing;
 
@@ -49,7 +42,7 @@ void Game::gameLoop()
 	{
 		case Playing:
 		{
-			AnimatedSprite animatedBirdSprite(sf::seconds(0.1f), false, true);
+			AnimatedSprite animatedBirdSprite(sf::seconds(0.2f), false, true);
 			animatedBirdSprite.setOrigin(17, 12);
 			animatedBirdSprite.setPosition(sf::Vector2f(SCREEN_WIDTH/5, SCREEN_HEIGHT/2-25));
 
@@ -59,7 +52,6 @@ void Game::gameLoop()
 			{				
 				while (atMenu == 0)
 				{
-					animatedBirdSprite.setFrameTime(sf::seconds(0.2f));
 					if (mainWindow.pollEvent(currentEvent))
 					{
 						mainWindow.clear(sf::Color::Black);
@@ -84,27 +76,18 @@ void Game::gameLoop()
 
 					animatedBirdSprite.play(birdAnimation);
 
-					//bird flapping motion
-					animatedBirdSprite.update(frameTime);
-
-					//ground movement
-					ground[0].getSprite().move(-0.07f, 0.f);
-					ground[1].getSprite().move(-0.07f, 0.f);
-					if (ground[0].getPosition().x < -287)
-						ground[0].setPosition(287, 399);
-					else if (ground[1].getPosition().x < -287)
-						ground[1].setPosition(287, 399);
+					//UPDATE
+					map.update("ground");
+					animatedBirdSprite.update(frameTime); //bird flapping motion
 
 					//DRAW
-					background.draw(mainWindow);
+					map.draw(mainWindow, atMenu);
 					mainWindow.draw(animatedBirdSprite);
-					ground[0].draw(mainWindow);
-					ground[1].draw(mainWindow);
 					mainWindow.display();
 				}
 				if (atMenu != 0)
 				{
-					cout << "playing" << endl;
+					animatedBirdSprite.setFrameTime(sf::seconds(0.15f));
 					if (mainWindow.pollEvent(currentEvent))
 					{
 						mainWindow.clear(sf::Color::Black);
@@ -120,7 +103,6 @@ void Game::gameLoop()
 							{
 								//update bird
 							}
-						
 
 						if (currentEvent.type == sf::Event::KeyPressed && currentEvent.key.code == sf::Keyboard::P)
 						{
@@ -130,25 +112,16 @@ void Game::gameLoop()
 					}
 
 					frameTime = frameClock.restart();
-
 					animatedBirdSprite.play(birdAnimation);
 
-					//bird flapping motion
-					animatedBirdSprite.update(frameTime);
-
-					//ground movement
-					ground[0].getSprite().move(-0.07f, 0.f);
-					ground[1].getSprite().move(-0.07f, 0.f);
-					if (ground[0].getPosition().x < -287)
-						ground[0].setPosition(287, 399);
-					else if (ground[1].getPosition().x < -287)
-						ground[1].setPosition(287, 399);
+					//UPDATE
+					map.update("ground");
+					map.update("pipes");
+					animatedBirdSprite.update(frameTime); //bird flapping motion
 
 					//DRAW
-					background.draw(mainWindow);
+					map.draw(mainWindow, atMenu);
 					mainWindow.draw(animatedBirdSprite);
-					ground[0].draw(mainWindow);
-					ground[1].draw(mainWindow);
 					mainWindow.display();
 				}
 			

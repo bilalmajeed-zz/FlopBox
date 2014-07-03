@@ -1,5 +1,8 @@
 #pragma once
 
+#include <iostream>
+#include <time.h>
+
 #include "SFML\Window.hpp"
 #include "SFML\Graphics.hpp"
 #include "SFML\Audio.hpp"
@@ -7,6 +10,7 @@
 #include "AnimatedSprite.h"
 #include "Animation.h"
 #include "GameObjects.h"
+#include "Map.h"
 
 class Game
 {
@@ -38,10 +42,7 @@ private:
 	GameState gameState;
 	sf::RenderWindow mainWindow;
 
-	//from animation library by LaurentGomila
-	Animation birdAnimation;
-
+	Animation birdAnimation; //from animation library by LaurentGomila
 	GameObjects bird;
-	GameObjects background;
-	GameObjects ground[2];
+	Map map;
 };

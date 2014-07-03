@@ -14,8 +14,6 @@ public:
 	void load(string imagePath, sf::IntRect toShow);
 	void draw(sf::RenderWindow & window);
 
-	virtual void update();
-
 	void setPosition(float x, float y); //sets position of object
 	sf::Vector2f getPosition() const; //gets position of the object
 
