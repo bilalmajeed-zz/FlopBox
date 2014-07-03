@@ -5,5 +5,5 @@
 class Bird : public GameObjects
 {
 public:
-	virtual void update();
+	virtual void update(float speed);
 };

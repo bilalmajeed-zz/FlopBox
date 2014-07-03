@@ -25,6 +25,7 @@ private:
 	enum GameState
 	{
 		Uninit,
+		ShowingMainMenu,
 		Playing,
 		Paused,
 		Exiting
@@ -40,4 +41,5 @@ private:
 
 	Bird flappy;
 	GameObjects background;
+	GameObjects ground;
 };
