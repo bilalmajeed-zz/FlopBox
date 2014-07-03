@@ -6,7 +6,7 @@
 
 #include "AnimatedSprite.h"
 #include "Animation.h"
-#include "Bird.h"
+#include "GameObjects.h"
 
 class Game
 {
@@ -17,6 +17,9 @@ public:
 private:
 	static const int SCREEN_WIDTH = 287;
 	static const int SCREEN_HEIGHT = 510;
+	int atMenu = 0;
+	int firstFly = 1;
+	bool isReady = false; 
 
 	bool isExiting(); //checks if the game is over or not
 	void gameLoop(); //the main loop of the game
@@ -25,7 +28,6 @@ private:
 	enum GameState
 	{
 		Uninit,
-		ShowingMainMenu,
 		Playing,
 		Paused,
 		Exiting
@@ -39,7 +41,7 @@ private:
 	//from animation library by LaurentGomila
 	Animation birdAnimation;
 
-	Bird flappy;
+	GameObjects bird;
 	GameObjects background;
-	GameObjects ground;
+	GameObjects ground[2];
 };
