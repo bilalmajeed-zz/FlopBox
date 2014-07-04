@@ -19,7 +19,7 @@ private:
 	GameObjects bottomPipes[2];
 	GameObjects topPipes[2];
 	sf::Vector2f configurations[3];
-	
+	int pipePosY;
 	int spacing = 160;
 	int verticalSpacing = 83;
 

@@ -9,19 +9,17 @@ Map::Map()
 	ground[0].setPosition(0.f, 399.f);
 	ground[1].setPosition(287.f, 399.f);
 
-	configurations[0] = sf::Vector2f(333, 250);
-	configurations[1] = sf::Vector2f(240, 157);
-	configurations[2] = sf::Vector2f(151, 68);
-	
+	pipePosY = (rand() % 260 - 350)*-1;
+
 	for (int i = 0; i < 2; i++)
 	{
 		bottomPipes[i].load("res/graphics.png", sf::IntRect(112, 646, 52, 320));
 		topPipes[i].load("res/graphics.png", sf::IntRect(112, 646, 52, 320));
-		topPipes[i].getSprite().setOrigin(0.0f, 320.f);
-			
 
-		bottomPipes[i].setPosition(287 + i * spacing, configurations[1].x);
-		topPipes[i].setPosition(287 + i * spacing, configurations[1].y);
+		topPipes[i].getSprite().setOrigin(0.0f, 320.f);
+
+		bottomPipes[i].setPosition(287 + i * spacing, pipePosY);
+		topPipes[i].setPosition(287 + i * spacing, pipePosY - verticalSpacing);
 	}
 }
 
@@ -41,16 +39,16 @@ void Map::update(string object)
 	//pipes movement
 	if (object == "pipes")
 	{
-		for (int i = 0; i <= 2; i++)
+		for (int a = 0; a < 2; a++)
 		{
-			bottomPipes[i].getSprite().move(-0.07f, 0);
-			topPipes[i].getSprite().move(-0.07f, 0);
+			bottomPipes[a].getSprite().move(-0.5f, 0);
+			topPipes[a].getSprite().move(-0.5f, 0);
 
-			if (bottomPipes[i].getPosition().x < -52 && topPipes[i].getPosition().x < -52)
+			if (bottomPipes[a].getPosition().x < -52 && topPipes[a].getPosition().x < -52)
 			{
-				configNum = rand() % 3;
-				bottomPipes[i].setPosition(287, configurations[configNum].x);
-				topPipes[i].setPosition(287, configurations[configNum].y);
+				pipePosY = (rand() % 240 - 350)*-1;
+				bottomPipes[a].setPosition(287, pipePosY);
+				topPipes[a].setPosition(287, pipePosY - verticalSpacing);
 			}
 		}
 	}

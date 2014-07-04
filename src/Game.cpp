@@ -120,7 +120,7 @@ void Game::gameLoop()
 					animatedBirdSprite.update(frameTime); //bird flapping motion
 
 					//DRAW
-					map.draw(mainWindow, atMenu);
+					map.draw(mainWindow, 1);
 					mainWindow.draw(animatedBirdSprite);
 					mainWindow.display();
 				}
