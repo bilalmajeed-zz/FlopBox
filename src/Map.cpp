@@ -23,13 +23,13 @@ Map::Map()
 	}
 }
 
-void Map::update(string object)
+void Map::update(string object, float speed)
 {
 	//ground movement
 	if (object == "ground")
 	{
-		ground[0].getSprite().move(-0.07f, 0.f);
-		ground[1].getSprite().move(-0.07f, 0.f);
+		ground[0].getSprite().move(-speed, 0.f);
+		ground[1].getSprite().move(-speed, 0.f);
 		if (ground[0].getPosition().x < -287)
 			ground[0].setPosition(287, 399);
 		else if (ground[1].getPosition().x < -287)
@@ -41,8 +41,8 @@ void Map::update(string object)
 	{
 		for (int a = 0; a < 2; a++)
 		{
-			bottomPipes[a].getSprite().move(-0.5f, 0);
-			topPipes[a].getSprite().move(-0.5f, 0);
+			bottomPipes[a].getSprite().move(-speed, 0);
+			topPipes[a].getSprite().move(-speed, 0);
 
 			if (bottomPipes[a].getPosition().x < -52 && topPipes[a].getPosition().x < -52)
 			{

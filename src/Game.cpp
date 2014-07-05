@@ -45,7 +45,8 @@ void Game::gameLoop()
 			AnimatedSprite animatedBirdSprite(sf::seconds(0.2f), false, true);
 			animatedBirdSprite.setOrigin(17, 12);
 			animatedBirdSprite.setPosition(sf::Vector2f(SCREEN_WIDTH/5, SCREEN_HEIGHT/2-25));
-
+			
+			int speed = 100;
 			sf::Event currentEvent;
 			sf::Time frameTime;
 			do
@@ -77,7 +78,7 @@ void Game::gameLoop()
 					animatedBirdSprite.play(birdAnimation);
 
 					//UPDATE
-					map.update("ground");
+					map.update("ground", speed * frameTime.asSeconds());
 					animatedBirdSprite.update(frameTime); //bird flapping motion
 
 					//DRAW
@@ -115,8 +116,8 @@ void Game::gameLoop()
 					animatedBirdSprite.play(birdAnimation);
 
 					//UPDATE
-					map.update("ground");
-					map.update("pipes");
+					map.update("ground", speed * frameTime.asSeconds());
+					map.update("pipes", speed * frameTime.asSeconds());
 					animatedBirdSprite.update(frameTime); //bird flapping motion
 
 					//DRAW
