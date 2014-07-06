@@ -47,7 +47,7 @@ void Game::gameLoop()
 			animatedBirdSprite.setPosition(sf::Vector2f(SCREEN_WIDTH/5, SCREEN_HEIGHT/2-25));
 			
 			int speed = 100;
-			float birdmoveY = 0.7f;
+			float birdmoveY = 0.0f;
 			sf::Event currentEvent;
 			sf::Time frameTime;
 			do
@@ -102,9 +102,14 @@ void Game::gameLoop()
 
 						if (currentEvent.type == sf::Event::MouseButtonPressed || currentEvent.type == sf::Event::KeyPressed)
 						{
-							if ((currentEvent.key.code == sf::Keyboard::Space || currentEvent.mouseButton.button == sf::Mouse::Left) && !keyPressed)
+							if ((currentEvent.mouseButton.button == sf::Mouse::Left || currentEvent.key.code == sf::Keyboard::Space) && !keyPressed)
 							{
-								birdmoveY = -0.1f;
+								//bird up and down movements
+								if (animatedBirdSprite.getPosition().y <= 150)
+									birdmoveY -= birdmoveY + 0.99;
+								else
+									birdmoveY -= birdmoveY + 0.9;
+								
 								keyPressed = true;
 							}
 							else
@@ -112,35 +117,41 @@ void Game::gameLoop()
 								keyPressed = false;
 							}
 						}
-						else if (currentEvent.type != sf::Event::MouseButtonPressed || currentEvent.type != sf::Event::KeyPressed)
+						else
 						{
 							keyPressed = false;
 						}
-						if (currentEvent.type == sf::Event::KeyPressed)
-						{
-							if (currentEvent.key.code == sf::Keyboard::P)
-							{
-								gameState = Paused;
-								break;
-							}
-						}
+						
 					}
+
+					if (animatedBirdSprite.getPosition().y <= 100)
+						comingFromHighPos = true;
+					else
+						comingFromHighPos = false;
 
 					frameTime = frameClock.restart();
 					animatedBirdSprite.play(birdAnimation);
+
+					if (birdmoveY < 0.1f && !keyPressed)
+					{
+						if (comingFromHighPos)
+							birdmoveY += (0.09);
+						else
+							birdmoveY += (0.04);
+					}
+					else if (birdmoveY < 0.1f && keyPressed)
+					{
+						birdmoveY += (0.01);
+					}
+					animatedBirdSprite.move(0.0f, birdmoveY);
 					
-					if (birdmoveY < -1.f)
-						birdmoveY += 0.03f;
-					animatedBirdSprite.move(0.f, birdmoveY);
-
-
 					//UPDATE
-					map.update("ground", speed * frameTime.asSeconds());
-					map.update("pipes", speed * frameTime.asSeconds());
-					animatedBirdSprite.update(frameTime); //bird flapping motion
+					map.update("ground", speed * frameTime.asSeconds()); //ground movement
+					map.update("pipes", speed * frameTime.asSeconds()); //pipes movement
+					animatedBirdSprite.update(frameTime); //bird flapping motoin
 
 					//DRAW
-					map.draw(mainWindow, 1);
+					map.draw(mainWindow, atMenu);
 					mainWindow.draw(animatedBirdSprite);
 					mainWindow.display();
 				}
