@@ -22,7 +22,7 @@ private:
 	static const int SCREEN_WIDTH = 287;
 	static const int SCREEN_HEIGHT = 510;
 	int atMenu = 0;
-	int firstFly = 1;
+	bool keyPressed = false;
 	bool isReady = false; 
 
 	bool isExiting(); //checks if the game is over or not

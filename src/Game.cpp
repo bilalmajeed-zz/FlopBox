@@ -47,6 +47,7 @@ void Game::gameLoop()
 			animatedBirdSprite.setPosition(sf::Vector2f(SCREEN_WIDTH/5, SCREEN_HEIGHT/2-25));
 			
 			int speed = 100;
+			float birdmoveY = 0.7f;
 			sf::Event currentEvent;
 			sf::Time frameTime;
 			do
@@ -100,20 +101,38 @@ void Game::gameLoop()
 						}
 
 						if (currentEvent.type == sf::Event::MouseButtonPressed || currentEvent.type == sf::Event::KeyPressed)
-							if (currentEvent.key.code == sf::Keyboard::Space || currentEvent.mouseButton.button == sf::Mouse::Left)
-							{
-								//update bird
-							}
-
-						if (currentEvent.type == sf::Event::KeyPressed && currentEvent.key.code == sf::Keyboard::P)
 						{
-							gameState = Paused;
-							break;
+							if ((currentEvent.key.code == sf::Keyboard::Space || currentEvent.mouseButton.button == sf::Mouse::Left) && !keyPressed)
+							{
+								birdmoveY = -0.1f;
+								keyPressed = true;
+							}
+							else
+							{
+								keyPressed = false;
+							}
+						}
+						else if (currentEvent.type != sf::Event::MouseButtonPressed || currentEvent.type != sf::Event::KeyPressed)
+						{
+							keyPressed = false;
+						}
+						if (currentEvent.type == sf::Event::KeyPressed)
+						{
+							if (currentEvent.key.code == sf::Keyboard::P)
+							{
+								gameState = Paused;
+								break;
+							}
 						}
 					}
 
 					frameTime = frameClock.restart();
 					animatedBirdSprite.play(birdAnimation);
+					
+					if (birdmoveY < -1.f)
+						birdmoveY += 0.03f;
+					animatedBirdSprite.move(0.f, birdmoveY);
+
 
 					//UPDATE
 					map.update("ground", speed * frameTime.asSeconds());
