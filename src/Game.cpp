@@ -48,6 +48,7 @@ void Game::gameLoop()
 			
 			int speed = 100;
 			float birdmoveY = 0.0f;
+			int birdRotatation = 0;
 			sf::Event currentEvent;
 			sf::Time frameTime;
 			do
@@ -109,6 +110,8 @@ void Game::gameLoop()
 									birdmoveY -= birdmoveY + 0.99;
 								else
 									birdmoveY -= birdmoveY + 0.9;
+
+								birdRotatation = -45;
 								
 								keyPressed = true;
 							}
@@ -138,12 +141,19 @@ void Game::gameLoop()
 							birdmoveY += (0.09);
 						else
 							birdmoveY += (0.04);
+
 					}
 					else if (birdmoveY < 0.1f && keyPressed)
 					{
 						birdmoveY += (0.01);
 					}
+
+					if (!keyPressed)
+					{
+						birdRotatation = 45;
+					}
 					animatedBirdSprite.move(0.0f, birdmoveY);
+					animatedBirdSprite.setRotation(birdRotatation);
 					
 					//UPDATE
 					map.update("ground", speed * frameTime.asSeconds()); //ground movement
