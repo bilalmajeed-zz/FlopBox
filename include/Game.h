@@ -21,9 +21,8 @@ public:
 private:
 	static const int SCREEN_WIDTH = 287;
 	static const int SCREEN_HEIGHT = 510;
-	int atMenu = 0;
+	const string FILE_PATH = "res/graphics.png";
 	bool keyPressed = false;
-	bool isReady = false; 
 	bool comingFromHighPos = false;
 	bool flapping = true;
 
@@ -34,6 +33,7 @@ private:
 	enum GameState
 	{
 		Uninit,
+		Menu,
 		Playing,
 		Paused,
 		Exiting
@@ -46,5 +46,7 @@ private:
 
 	Animation birdAnimation; //from animation library by LaurentGomila
 	GameObjects bird;
+	GameObjects getReady;
+	GameObjects instructions;
 	Map map;
 };

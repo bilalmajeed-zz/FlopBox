@@ -25,10 +25,10 @@ Map::Map()
 
 bool Map::isColliding(sf::FloatRect bird)
 {
-	sf::FloatRect topPipe1 = topPipes[1].getSprite().getGlobalBounds();
-	sf::FloatRect topPipe2 = topPipes[2].getSprite().getGlobalBounds();
-	sf::FloatRect bottomPipe1 = bottomPipes[1].getSprite().getGlobalBounds();
-	sf::FloatRect bottomPipe2 = bottomPipes[2].getSprite().getGlobalBounds();
+	sf::FloatRect topPipe1 = topPipes[0].getSprite().getGlobalBounds();
+	sf::FloatRect topPipe2 = topPipes[1].getSprite().getGlobalBounds();
+	sf::FloatRect bottomPipe1 = bottomPipes[0].getSprite().getGlobalBounds();
+	sf::FloatRect bottomPipe2 = bottomPipes[1].getSprite().getGlobalBounds();
 	
 	if (bird.intersects(topPipe1) || bird.intersects(topPipe2) || bird.intersects(bottomPipe1) || bird.intersects(bottomPipe2))
 		return true;
