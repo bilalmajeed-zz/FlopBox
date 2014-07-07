@@ -160,7 +160,10 @@ void Game::gameLoop()
 					animatedBirdSprite.play(birdAnimation);
 					animatedBirdSprite.move(0.0f, birdmoveY);
 					animatedBirdSprite.setRotation(static_cast<float>(birdRotatation));
-									
+					
+					if (map.isColliding(animatedBirdSprite.getGlobalBounds()))
+						cout << "collision";
+
 					//UPDATE
 					map.update("ground", speed * frameTime.asSeconds()); //ground movement
 					map.update("pipes", speed * frameTime.asSeconds()); //pipes movement

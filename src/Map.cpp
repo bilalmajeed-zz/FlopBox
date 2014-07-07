@@ -2,10 +2,10 @@
 
 Map::Map()
 {
-	background.load("res/graphics.png", sf::IntRect(0, 0, 287, 510));
+	background.load(FILEPATH, sf::IntRect(0, 0, 287, 510));
 
-	ground[0].load("res/graphics.png", sf::IntRect(584, 0, 335, 111));
-	ground[1].load("res/graphics.png", sf::IntRect(584, 0, 335, 111));
+	ground[0].load(FILEPATH, sf::IntRect(584, 0, 335, 111));
+	ground[1].load(FILEPATH, sf::IntRect(584, 0, 335, 111));
 	ground[0].setPosition(0.f, 399.f);
 	ground[1].setPosition(287.f, 399.f);
 
@@ -13,14 +13,27 @@ Map::Map()
 
 	for (int i = 0; i < 2; i++)
 	{
-		bottomPipes[i].load("res/graphics.png", sf::IntRect(112, 646, 52, 320));
-		topPipes[i].load("res/graphics.png", sf::IntRect(112, 646, 52, 320));
+		bottomPipes[i].load(FILEPATH, sf::IntRect(112, 646, 52, 320));
+		topPipes[i].load(FILEPATH, sf::IntRect(112, 646, 52, 320));
 
 		topPipes[i].getSprite().setOrigin(0.0f, 320.f);
 
 		bottomPipes[i].setPosition(287 + i * spacing, pipePosY);
 		topPipes[i].setPosition(287 + i * spacing, pipePosY - verticalSpacing);
 	}
+}
+
+bool Map::isColliding(sf::FloatRect bird)
+{
+	sf::FloatRect topPipe1 = topPipes[1].getSprite().getGlobalBounds();
+	sf::FloatRect topPipe2 = topPipes[2].getSprite().getGlobalBounds();
+	sf::FloatRect bottomPipe1 = bottomPipes[1].getSprite().getGlobalBounds();
+	sf::FloatRect bottomPipe2 = bottomPipes[2].getSprite().getGlobalBounds();
+	
+	if (bird.intersects(topPipe1) || bird.intersects(topPipe2) || bird.intersects(bottomPipe1) || bird.intersects(bottomPipe2))
+		return true;
+	return false;
+
 }
 
 void Map::update(string object, float speed)
