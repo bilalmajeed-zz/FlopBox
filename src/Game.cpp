@@ -10,7 +10,7 @@ void Game::start()
 	if (gameState != Uninit)
 		return;
 
-	srand(time(NULL));
+	srand(static_cast<unsigned>(time(NULL)));
 	mainWindow.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Flap Those Wings", sf::Style::Titlebar | sf::Style::Close);
 	mainWindow.setPosition(sf::Vector2i(400, 10));
 
@@ -48,7 +48,7 @@ void Game::gameLoop()
 			
 			int speed = 100;
 			float birdmoveY = 0.0f;
-			int birdRotatation = 0;
+			double birdRotatation = 0;
 			sf::Event currentEvent;
 			sf::Time frameTime;
 			do
@@ -90,7 +90,7 @@ void Game::gameLoop()
 				}
 				if (atMenu != 0)
 				{
-					animatedBirdSprite.setFrameTime(sf::seconds(0.15f));
+					animatedBirdSprite.setFrameTime(sf::seconds(0.05f));
 					if (mainWindow.pollEvent(currentEvent))
 					{
 						mainWindow.clear(sf::Color::Black);
@@ -107,13 +107,14 @@ void Game::gameLoop()
 							{
 								//bird up and down movements
 								if (animatedBirdSprite.getPosition().y <= 150)
-									birdmoveY -= birdmoveY + 0.99;
+									birdmoveY -= birdmoveY + 0.99f;
 								else
-									birdmoveY -= birdmoveY + 0.9;
+									birdmoveY -= birdmoveY + 0.9f;
 
-								birdRotatation = -45;
+								birdRotatation = -35;
 								
 								keyPressed = true;
+								flapping = true;
 							}
 							else
 							{
@@ -123,7 +124,7 @@ void Game::gameLoop()
 						else
 						{
 							keyPressed = false;
-						}
+						} 
 						
 					}
 
@@ -133,32 +134,40 @@ void Game::gameLoop()
 						comingFromHighPos = false;
 
 					frameTime = frameClock.restart();
-					animatedBirdSprite.play(birdAnimation);
 
 					if (birdmoveY < 0.1f && !keyPressed)
 					{
 						if (comingFromHighPos)
-							birdmoveY += (0.09);
+							birdmoveY += (0.09f);
 						else
-							birdmoveY += (0.04);
+							birdmoveY += (0.04f);
 
 					}
 					else if (birdmoveY < 0.1f && keyPressed)
 					{
-						birdmoveY += (0.01);
+						birdmoveY += (0.01f);
 					}
 
-					if (!keyPressed)
-					{
-						birdRotatation = 45;
-					}
-					animatedBirdSprite.move(0.0f, birdmoveY);
-					animatedBirdSprite.setRotation(birdRotatation);
+					if (birdRotatation <= 90 && !keyPressed)
+						if (birdRotatation >= 0)
+						{
+							birdRotatation += 0.4;
+							flapping = false;
+						}
+						else
+							birdRotatation += 0.15;
 					
+					animatedBirdSprite.play(birdAnimation);
+					animatedBirdSprite.move(0.0f, birdmoveY);
+					animatedBirdSprite.setRotation(static_cast<float>(birdRotatation));
+									
 					//UPDATE
 					map.update("ground", speed * frameTime.asSeconds()); //ground movement
 					map.update("pipes", speed * frameTime.asSeconds()); //pipes movement
-					animatedBirdSprite.update(frameTime); //bird flapping motoin
+					if (flapping)
+						animatedBirdSprite.update(frameTime); //bird flapping motoin
+					else
+						animatedBirdSprite.setFrame(1);
 
 					//DRAW
 					map.draw(mainWindow, atMenu);

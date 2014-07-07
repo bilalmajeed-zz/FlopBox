@@ -25,6 +25,7 @@ private:
 	bool keyPressed = false;
 	bool isReady = false; 
 	bool comingFromHighPos = false;
+	bool flapping = true;
 
 	bool isExiting(); //checks if the game is over or not
 	void gameLoop(); //the main loop of the game
