@@ -13,8 +13,8 @@ Map::Map()
 
 	for (int i = 0; i < 2; i++)
 	{
-		bottomPipes[i].load(FILEPATH, sf::IntRect(112, 646, 52, 320));
-		topPipes[i].load(FILEPATH, sf::IntRect(112, 646, 52, 320));
+		bottomPipes[i].load(PIPES_IMAGE, sf::IntRect(0, 0, 52, 320));
+		topPipes[i].load(PIPES_IMAGE, sf::IntRect(0, 0, 52, 320));
 
 		topPipes[i].getSprite().setOrigin(0.0f, 320.f);
 

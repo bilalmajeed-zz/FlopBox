@@ -16,6 +16,7 @@ public:
 
 private:
 	const string FILEPATH = "res/graphics.png";
+	const string PIPES_IMAGE = "res/pipes.png";
 	GameObjects background;
 	GameObjects ground[2];
 	GameObjects bottomPipes[2];
