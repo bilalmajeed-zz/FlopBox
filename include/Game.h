@@ -7,8 +7,6 @@
 #include "SFML\Graphics.hpp"
 #include "SFML\Audio.hpp"
 
-#include "AnimatedSprite.h"
-#include "Animation.h"
 #include "GameObjects.h"
 #include "Map.h"
 
@@ -22,6 +20,7 @@ private:
 	static const int SCREEN_WIDTH = 287;
 	static const int SCREEN_HEIGHT = 510;
 	const string FILE_PATH = "res/graphics.png";
+	const string BOX_IMAGE = "res/box.png";
 	bool keyPressed = false;
 	bool comingFromHighPos = false;
 	bool flapping = true;
@@ -44,8 +43,7 @@ private:
 	GameState gameState;
 	sf::RenderWindow mainWindow;
 
-	Animation birdAnimation; //from animation library by LaurentGomila
-	GameObjects bird;
+	GameObjects box;
 	GameObjects getReady;
 	GameObjects instructions;
 	Map map;

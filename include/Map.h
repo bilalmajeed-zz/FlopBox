@@ -23,6 +23,6 @@ private:
 	GameObjects topPipes[2];
 	int pipePosY;
 	int spacing = 160;
-	int verticalSpacing = 90;
+	int verticalSpacing = 100;
 
 };
