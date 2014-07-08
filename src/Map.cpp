@@ -23,14 +23,18 @@ Map::Map()
 	}
 }
 
-bool Map::isColliding(sf::FloatRect bird)
+bool Map::isColliding(sf::FloatRect box)
 {
 	sf::FloatRect topPipe1 = topPipes[0].getSprite().getGlobalBounds();
 	sf::FloatRect topPipe2 = topPipes[1].getSprite().getGlobalBounds();
 	sf::FloatRect bottomPipe1 = bottomPipes[0].getSprite().getGlobalBounds();
 	sf::FloatRect bottomPipe2 = bottomPipes[1].getSprite().getGlobalBounds();
+	sf::FloatRect ground1 = ground[0].getSprite().getGlobalBounds();
+	sf::FloatRect ground2 = ground[1].getSprite().getGlobalBounds();
 	
-	if (bird.intersects(topPipe1) || bird.intersects(topPipe2) || bird.intersects(bottomPipe1) || bird.intersects(bottomPipe2))
+	if (box.intersects(topPipe1) || box.intersects(topPipe2) ||
+		box.intersects(bottomPipe1) || box.intersects(bottomPipe2) ||
+		box.intersects(ground1) || box.intersects(ground2))
 		return true;
 	return false;
 
