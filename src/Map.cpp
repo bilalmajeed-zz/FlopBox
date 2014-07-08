@@ -40,6 +40,28 @@ bool Map::isColliding(sf::FloatRect box)
 
 }
 
+bool Map::isBoxThrough()
+{
+	int pipe1Xpos = static_cast<int>(bottomPipes[0].getPosition().x) + 26;
+	int pipe2Xpos = static_cast<int>(bottomPipes[1].getPosition().x) + 26;
+	int boxXpos = 82;
+	
+	if (boxXpos >= pipe1Xpos && count == 0)
+	{
+		count = 1;
+		return true;
+	}
+	if (boxXpos >= pipe2Xpos && count == 1)
+	{
+		count = 2;
+		return true;
+	}
+	if (count == 2)
+		count = 0;
+	return false;
+	
+}
+
 void Map::update(string object, float speed)
 {
 	//ground movement

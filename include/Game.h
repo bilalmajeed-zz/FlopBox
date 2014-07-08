@@ -2,6 +2,8 @@
 
 #include <iostream>
 #include <time.h>
+#include <sstream>
+#include <assert.h>
 
 #include "SFML\Window.hpp"
 #include "SFML\Graphics.hpp"
@@ -16,18 +18,20 @@ public:
 	Game();
 	void start();
 
-private:
+private:	
 	static const int SCREEN_WIDTH = 287;
 	static const int SCREEN_HEIGHT = 510;
 	const string FILE_PATH = "res/graphics.png";
 	const string BOX_IMAGE = "res/box.png";
 	bool keyPressed = false;
-	bool comingFromHighPos = false;
-	bool flapping = true;
+	int score = 0;
+	sf::Font font;
 
 	bool isExiting(); //checks if the game is over or not
 	void gameLoop(); //the main loop of the game
-
+	
+	void updateScore();
+	void drawScore(sf::RenderWindow & window);
 
 	enum GameState
 	{

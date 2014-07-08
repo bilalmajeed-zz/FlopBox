@@ -13,6 +13,8 @@ void Game::start()
 	srand(static_cast<unsigned>(time(NULL)));
 	mainWindow.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Flap The Wings", sf::Style::Titlebar | sf::Style::Close);
 	mainWindow.setPosition(sf::Vector2i(400, 10));
+	mainWindow.setKeyRepeatEnabled(false);
+	mainWindow.setFramerateLimit(31);
 
 	box.load(BOX_IMAGE, sf::IntRect(0, 0, 24, 24)); //load the box
 	box.getSprite().setOrigin(12, 12);
@@ -22,6 +24,9 @@ void Game::start()
 	getReady.setPosition(50, 89);
 	instructions.load(FILE_PATH, sf::IntRect(583, 182, 114, 98));
 	instructions.setPosition(80, 200);
+
+	if (!font.loadFromFile("res/scoreFont.ttf"))
+		assert(false);
 
 	gameState = Menu;
 
@@ -40,8 +45,8 @@ bool Game::isExiting()
 
 void Game::gameLoop()
 {
-	int speed = 100;
-	float birdmoveY = 0.0f;
+	int speed = 120;
+	float moveY = 0.0f;
 
 	sf::Event currentEvent;
 	sf::Time frameTime;
@@ -81,6 +86,7 @@ void Game::gameLoop()
 				box.draw(mainWindow);
 				getReady.draw(mainWindow);
 				instructions.draw(mainWindow);
+				drawScore(mainWindow);
 				mainWindow.display();
 			}
 		}
@@ -89,6 +95,7 @@ void Game::gameLoop()
 		{
 			while (true)
 			{
+				frameTime = frameClock.restart();
 				if (mainWindow.pollEvent(currentEvent))
 				{
 					mainWindow.clear(sf::Color::Black);
@@ -99,18 +106,13 @@ void Game::gameLoop()
 						break;
 					}
 
-					if (currentEvent.type == sf::Event::MouseButtonPressed || currentEvent.type == sf::Event::KeyPressed)
+					if (currentEvent.type == sf::Event::MouseButtonPressed)
 					{
-						if ((currentEvent.mouseButton.button == sf::Mouse::Left || currentEvent.key.code == sf::Keyboard::Space) && !keyPressed)
+						if ((currentEvent.mouseButton.button == sf::Mouse::Left) && !keyPressed)
 						{
 							//bird up and down movements
-							if (box.getPosition().y <= 150)
-								birdmoveY -= birdmoveY + 0.89f;
-							else
-								birdmoveY -= birdmoveY + 0.8f;
-
+							moveY -= moveY + (200 * frameTime.asSeconds());
 							keyPressed = true;
-							flapping = true;
 						}
 						else
 						{
@@ -124,14 +126,10 @@ void Game::gameLoop()
 
 				}
 
-				frameTime = frameClock.restart();
+				if (moveY < 20 && !keyPressed)
+					moveY += (45*frameTime.asSeconds());
 
-				if (birdmoveY < 0.1f && !keyPressed)
-					birdmoveY += (0.08f);
-				else if (birdmoveY < 0.1f && keyPressed)
-					birdmoveY += (0.01f);
-
-				box.getSprite().move(0.0f, birdmoveY);
+				box.getSprite().move(0.0f, moveY);
 
 				if (map.isColliding(box.getSprite().getGlobalBounds()))
 				{
@@ -142,27 +140,38 @@ void Game::gameLoop()
 				//UPDATE
 				map.update("ground", speed * frameTime.asSeconds()); //ground movement
 				map.update("pipes", speed * frameTime.asSeconds()); //pipes movement
+				if (map.isBoxThrough()) //score update
+					updateScore();
 
 				//DRAW
-				map.draw(mainWindow, 1);
-				box.draw(mainWindow);
-				mainWindow.display();
-			}
-			break;
-		}
-	
-		case Paused:
-		{
-			while (true)
-			{
-				sf::Event pauseEvent;
-				if (mainWindow.pollEvent(pauseEvent))
-					if (pauseEvent.type == sf::Event::KeyPressed)
-						if (pauseEvent.key.code == sf::Keyboard::P)
-							gameState = Playing;
-				break;
+				map.draw(mainWindow, 1); //draw ground and pipes
+				drawScore(mainWindow); //draw score
+				box.draw(mainWindow); //draw box
+				mainWindow.display(); //draw window
 			}
 			break;
 		}
 	}
+}
+
+void Game::updateScore()
+{
+	score++;
+}
+
+void Game::drawScore(sf::RenderWindow & window)
+{
+	string strScore;
+	ostringstream scoreConverter;
+	scoreConverter << score;
+	strScore = scoreConverter.str();
+
+	sf::Text score(strScore, font, 41);
+	score.setColor(sf::Color::White);
+
+	sf::FloatRect scoreRect = score.getLocalBounds();
+	score.setOrigin(scoreRect.left + scoreRect.width / 2.0f, scoreRect.top + scoreRect.height / 2.0f);
+	score.setPosition(SCREEN_WIDTH/2, 50);
+
+	window.draw(score);
 }

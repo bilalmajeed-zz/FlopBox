@@ -8,7 +8,8 @@ class Map
 {
 public:
 	Map();
-	bool isColliding(sf::FloatRect bird);
+	bool isColliding(sf::FloatRect box);
+	bool isBoxThrough();
 	void update(string object, float speed);
 	void draw(sf::RenderWindow & window, int atMenu);
 	
@@ -24,5 +25,6 @@ private:
 	int pipePosY;
 	int spacing = 160;
 	int verticalSpacing = 100;
+	int count = 0;
 
 };
