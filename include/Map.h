@@ -12,7 +12,6 @@ public:
 	bool isBoxThrough();
 	void update(string object, float speed);
 	void draw(sf::RenderWindow & window, int atMenu);
-	
 	int configNum;
 
 private:
@@ -24,7 +23,7 @@ private:
 	GameObjects topPipes[2];
 	int pipePosY;
 	int spacing = 160;
-	int verticalSpacing = 100;
+	int verticalSpacing = 90;
 	int count = 0;
 
 };

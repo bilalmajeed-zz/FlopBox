@@ -23,7 +23,9 @@ private:
 	static const int SCREEN_HEIGHT = 510;
 	const string FILE_PATH = "res/graphics.png";
 	const string BOX_IMAGE = "res/box.png";
+	
 	bool keyPressed = false;
+	
 	int score = 0;
 	sf::Font font;
 
@@ -38,7 +40,7 @@ private:
 		Uninit,
 		Menu,
 		Playing,
-		Paused,
+		GameOver,
 		Exiting
 	};
 
@@ -48,7 +50,5 @@ private:
 	sf::RenderWindow mainWindow;
 
 	GameObjects box;
-	GameObjects getReady;
-	GameObjects instructions;
 	Map map;
 };

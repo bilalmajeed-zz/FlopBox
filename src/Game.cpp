@@ -11,7 +11,7 @@ void Game::start()
 		return;
 
 	srand(static_cast<unsigned>(time(NULL)));
-	mainWindow.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Flap The Wings", sf::Style::Titlebar | sf::Style::Close);
+	mainWindow.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Flop Box", sf::Style::Titlebar | sf::Style::Close);
 	mainWindow.setPosition(sf::Vector2i(400, 10));
 	mainWindow.setKeyRepeatEnabled(false);
 	mainWindow.setFramerateLimit(31);
@@ -19,11 +19,6 @@ void Game::start()
 	box.load(BOX_IMAGE, sf::IntRect(0, 0, 24, 24)); //load the box
 	box.getSprite().setOrigin(12, 12);
 	box.setPosition(SCREEN_WIDTH / 5 + 25, SCREEN_HEIGHT / 2 - 25);
-
-	getReady.load(FILE_PATH, sf::IntRect(590, 116, 184, 52));
-	getReady.setPosition(50, 89);
-	instructions.load(FILE_PATH, sf::IntRect(583, 182, 114, 98));
-	instructions.setPosition(80, 200);
 
 	if (!font.loadFromFile("res/scoreFont.ttf"))
 		assert(false);
@@ -45,7 +40,7 @@ bool Game::isExiting()
 
 void Game::gameLoop()
 {
-	int speed = 120;
+	int speed = 150;
 	float moveY = 0.0f;
 
 	sf::Event currentEvent;
@@ -76,6 +71,13 @@ void Game::gameLoop()
 					}
 				}
 
+				sf::Text getReady("Get Ready!", font, 41);
+				getReady.setColor(sf::Color::White);
+
+				sf::FloatRect scoreRect = getReady.getLocalBounds();
+				getReady.setOrigin(scoreRect.left + scoreRect.width / 2.0f, scoreRect.top + scoreRect.height / 2.0f);
+				getReady.setPosition(SCREEN_WIDTH / 2, 125);
+
 				frameTime = frameClock.restart();
 
 				//UPDATE
@@ -84,8 +86,7 @@ void Game::gameLoop()
 				//DRAW
 				map.draw(mainWindow, 0);
 				box.draw(mainWindow);
-				getReady.draw(mainWindow);
-				instructions.draw(mainWindow);
+				mainWindow.draw(getReady);
 				drawScore(mainWindow);
 				mainWindow.display();
 			}
@@ -111,7 +112,7 @@ void Game::gameLoop()
 						if ((currentEvent.mouseButton.button == sf::Mouse::Left) && !keyPressed)
 						{
 							//bird up and down movements
-							moveY -= moveY + (200 * frameTime.asSeconds());
+							moveY -= moveY + (225 * frameTime.asSeconds());
 							keyPressed = true;
 						}
 						else
