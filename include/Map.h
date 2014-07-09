@@ -12,7 +12,7 @@ public:
 	bool isBoxThrough();
 	void update(string object, float speed);
 	void draw(sf::RenderWindow & window, int atMenu);
-	int configNum;
+	void reset();
 
 private:
 	const string FILEPATH = "res/graphics.png";
@@ -23,7 +23,7 @@ private:
 	GameObjects topPipes[2];
 	int pipePosY;
 	int spacing = 160;
-	int verticalSpacing = 90;
+	int verticalSpacing = 110;
 	int count = 0;
 
 };

@@ -31,7 +31,7 @@ bool Map::isColliding(sf::FloatRect box)
 	sf::FloatRect bottomPipe2 = bottomPipes[1].getSprite().getGlobalBounds();
 	sf::FloatRect ground1 = ground[0].getSprite().getGlobalBounds();
 	sf::FloatRect ground2 = ground[1].getSprite().getGlobalBounds();
-	
+
 	if (box.intersects(topPipe1) || box.intersects(topPipe2) ||
 		box.intersects(bottomPipe1) || box.intersects(bottomPipe2) ||
 		box.intersects(ground1) || box.intersects(ground2))
@@ -106,4 +106,20 @@ void Map::draw(sf::RenderWindow & window, int atMenu)
 	}
 	ground[0].draw(window);
 	ground[1].draw(window);
+}
+
+void Map::reset()
+{
+	ground[0].setPosition(0.f, 399.f);
+	ground[1].setPosition(287.f, 399.f);
+
+	pipePosY = (rand() % 260 - 350)*-1;
+
+	for (int i = 0; i < 2; i++)
+	{
+		bottomPipes[i].setPosition(287 + i * spacing, pipePosY);
+		topPipes[i].setPosition(287 + i * spacing, pipePosY - verticalSpacing);
+	}
+
+	count = 0;
 }

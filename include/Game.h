@@ -25,7 +25,7 @@ private:
 	const string BOX_IMAGE = "res/box.png";
 	
 	bool keyPressed = false;
-	
+	int count = 1;
 	int score = 0;
 	sf::Font font;
 
@@ -34,6 +34,8 @@ private:
 	
 	void updateScore();
 	void drawScore(sf::RenderWindow & window);
+
+	void reset();
 
 	enum GameState
 	{

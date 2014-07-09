@@ -40,9 +40,9 @@ bool Game::isExiting()
 
 void Game::gameLoop()
 {
-	int speed = 150;
+	int speed = 175;
 	float moveY = 0.0f;
-
+	double boxRotation = 0;
 	sf::Event currentEvent;
 	sf::Time frameTime;
 
@@ -61,22 +61,24 @@ void Game::gameLoop()
 						gameState = Exiting;
 						break;
 					}
-					if (currentEvent.type == sf::Event::MouseButtonPressed)
+					if (currentEvent.type == sf::Event::MouseButtonPressed && currentEvent.mouseButton.button == sf::Mouse::Left)
 					{
-						if (currentEvent.mouseButton.button == sf::Mouse::Left)
-						{
-							gameState = Playing;
-							break;
-						}
+						gameState = Playing;
+						break;
 					}
 				}
 
-				sf::Text getReady("Get Ready!", font, 41);
+				sf::Text getReady("Get Ready!", font, 45);
 				getReady.setColor(sf::Color::White);
-
-				sf::FloatRect scoreRect = getReady.getLocalBounds();
-				getReady.setOrigin(scoreRect.left + scoreRect.width / 2.0f, scoreRect.top + scoreRect.height / 2.0f);
+				sf::FloatRect getReadyRect = getReady.getLocalBounds();
+				getReady.setOrigin(getReadyRect.left + getReadyRect.width / 2.0f, getReadyRect.top + getReadyRect.height / 2.0f);
 				getReady.setPosition(SCREEN_WIDTH / 2, 125);
+
+				sf::Text instructions("(Use your mouse to control the box)", font, 15);
+				instructions.setColor(sf::Color::White);
+				sf::FloatRect instructionsRect = instructions.getLocalBounds();
+				instructions.setOrigin(instructionsRect.left + instructionsRect.width / 2.0f, instructionsRect.top + instructionsRect.height / 2.0f);
+				instructions.setPosition(SCREEN_WIDTH / 2, 160);
 
 				frameTime = frameClock.restart();
 
@@ -87,9 +89,11 @@ void Game::gameLoop()
 				map.draw(mainWindow, 0);
 				box.draw(mainWindow);
 				mainWindow.draw(getReady);
+				mainWindow.draw(instructions);
 				drawScore(mainWindow);
 				mainWindow.display();
 			}
+			break;
 		}
 	
 		case Playing:
@@ -97,6 +101,11 @@ void Game::gameLoop()
 			while (true)
 			{
 				frameTime = frameClock.restart();
+				if (count == 1)
+				{
+					moveY = -(400 * frameTime.asSeconds());
+					count = 2;
+				}
 				if (mainWindow.pollEvent(currentEvent))
 				{
 					mainWindow.clear(sf::Color::Black);
@@ -112,7 +121,7 @@ void Game::gameLoop()
 						if ((currentEvent.mouseButton.button == sf::Mouse::Left) && !keyPressed)
 						{
 							//bird up and down movements
-							moveY -= moveY + (225 * frameTime.asSeconds());
+							moveY -= moveY + (290 * frameTime.asSeconds());
 							keyPressed = true;
 						}
 						else
@@ -130,11 +139,15 @@ void Game::gameLoop()
 				if (moveY < 20 && !keyPressed)
 					moveY += (45*frameTime.asSeconds());
 
+				boxRotation += 5;
+
 				box.getSprite().move(0.0f, moveY);
+				box.getSprite().setRotation(boxRotation);
 
 				if (map.isColliding(box.getSprite().getGlobalBounds()))
 				{
-					gameState = Exiting;
+					reset();
+					gameState = Menu;
 					break;
 				}
 
@@ -175,4 +188,14 @@ void Game::drawScore(sf::RenderWindow & window)
 	score.setPosition(SCREEN_WIDTH/2, 50);
 
 	window.draw(score);
+}
+
+void Game::reset()
+{
+	score = 0;
+	keyPressed = false;
+	box.setPosition(SCREEN_WIDTH / 5 + 25, SCREEN_HEIGHT / 2 - 25);
+	box.getSprite().setRotation(0);
+	map.reset();
+	count = 1;
 }
